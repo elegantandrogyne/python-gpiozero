@@ -821,3 +821,25 @@ class Motor(SourceMixin, CompositeDevice):
         """
         self.forward_device.off()
         self.backward_device.off()
+
+
+class Servo(PWMOutputDevice):
+    def __init__(self, pin=None, active_high=True, initial_value=0, frequency=100, max_angle=180, minimum=0.033, maximum=0.254):
+        super(Servo, self).__init__(pin, active_high, initial_value, frequency)
+        self._max_angle = max_angle
+        self._minimum = minimum
+        self._maximum = maximum
+        self._angle = None  # don't know what it is on init
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, value):
+        if 0 > value > self._max_angle:
+            raise OutputDeviceBadValue(
+                "angle must be between 0 and %s" % self._max_angle
+            )
+        self._angle = value
+        self.value = ((self._maximum - self._minimum) * value / self._max_angle) + self._minimum

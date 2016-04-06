@@ -84,6 +84,7 @@ from .output_devices import (
     Buzzer,
     Motor,
     RGBLED,
+    Servo,
 )
 from .boards import (
     CompositeOutputDevice,
